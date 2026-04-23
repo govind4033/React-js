@@ -1,119 +1,123 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
+import { use } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [length, setLength] = useState(0);
+  const [isNumberAllowed, setIsNumberAllowed] = useState(false);
+  const [isSpecialCharactersAllowed, setIsSpecialCharactersAllowed] = useState(false);
+  const [password, setPassword] = useState('');
+
+  const passwordRef = useRef(null);
+
+  const generatePassword = useCallback(() => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const specialCharacters = '!@#$%&*';
+    
+    let str = characters;
+    
+    if (isNumberAllowed) {
+      str += numbers;
+    }
+    
+    if (isSpecialCharactersAllowed) {
+      str += specialCharacters;
+    }
+    
+    let generatedPassword = '';
+    
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * str.length);
+      generatedPassword += str[randomIndex];
+    }
+    
+    setPassword(generatedPassword);
+  }, [length, isNumberAllowed, isSpecialCharactersAllowed, setPassword]);
+
+  const copyToClipboard = useCallback(() => {
+    window.navigator.clipboard.writeText(password);
+  }, [password]);
+
+  useEffect(() => {
+    generatePassword();
+  }, [length, isNumberAllowed, isSpecialCharactersAllowed, generatePassword]);
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">
+        
+        <div className="bg-slate-800 p-6 rounded-2xl shadow-lg w-[350px]">
+          
+          <h1 className="text-2xl font-bold text-center mb-4">
+            Password Generator 🔐
+          </h1>
 
-      <div className="ticks"></div>
+          {/* Password + Copy */}
+          <div className="flex mb-4">
+            <input
+              ref={passwordRef}
+              type="text"
+              value={password}
+              readOnly
+              className="w-full p-2 rounded-l-lg text-black outline-none bg-white"
+            />
+            <button
+              onClick={copyToClipboard}
+              className="bg-blue-500 px-3 rounded-r-lg hover:bg-blue-600"
+            >
+              Copy
+            </button>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {/* Length Slider */}
+          <div className="mb-4">
+            <label className="block mb-1">
+              Length: {length}
+            </label>
+            <input
+              type="range"
+              min={4}
+              max={20}
+              value={length}
+              onChange={(e) => setLength(Number(e.target.value))}
+              className="w-full cursor-pointer"
+            />
+          </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+          {/* Checkboxes */}
+          <div className="flex justify-between mb-4">
+            
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={isNumberAllowed}
+                onChange={() => setIsNumberAllowed((prev) => !prev)}
+              />
+              Numbers
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={isSpecialCharactersAllowed}
+                onChange={() => setIsSpecialCharactersAllowed((prev) => !prev)}
+              />
+              Special
+            </label>
+
+          </div>
+
+          {/* Generate Button */}
+          <button
+            onClick={generatePassword}
+            className="w-full bg-green-500 py-2 rounded-lg hover:bg-green-600 transition"
+          >
+            Generate Password
+          </button>
+
+        </div>
+      </div>
     </>
   )
 }
