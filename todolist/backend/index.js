@@ -6,6 +6,7 @@ app.use(express.json());
 
 app.use(cors({
   origin: "*",
+  origin: "https://friendly-mousse-c53720.netlify.app/",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
 }));
 
