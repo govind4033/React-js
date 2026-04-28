@@ -3,7 +3,7 @@ import { useTodo } from '../context'
 
 function Todoitem({ todo }) {
 
-  const { updateTodo, deleteTodo, Togglecomplete } = useTodo()
+  const { updateTodo, deleteTodo, toggleComplete } = useTodo()
 
   const [isEditable, setisEditable] = useState(false)
   const [todoMsg, setTodoMsg] = useState(todo.todo)
@@ -19,7 +19,7 @@ function Todoitem({ todo }) {
       <input
         type="checkbox"
         checked={todo.completed}
-        onChange={() => Togglecomplete(todo.id)}
+        onChange={() => toggleComplete(todo.id)}
       />
 
       {
@@ -29,7 +29,7 @@ function Todoitem({ todo }) {
             onChange={(e) => setTodoMsg(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                editTodo();   // save on Enter
+                editTodo();
               }
             }}
             className="mx-2 flex-1 px-2 py-1 rounded border"

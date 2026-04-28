@@ -1,16 +1,102 @@
-# React + Vite
+# Todo REST API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+A REST API that supports full CRUD operations — creating, reading, updating, and deleting tasks.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## API Endpoints
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Get All Tasks
 
-## Expanding the ESLint configuration
+| Property | Value |
+|----------|-------|
+| **Endpoint** | `/todos` |
+| **Method** | `GET` |
+| **Response** | Array of all task objects |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+### 2. Create a New Task
+
+| Property | Value |
+|----------|-------|
+| **Endpoint** | `/todos` |
+| **Method** | `POST` |
+
+**Request Body:**
+```json
+{
+  "todo": "learn Express.js"
+}
+```
+
+**Response:** The newly created task object.
+
+---
+
+### 3. Update a Task
+
+| Property | Value |
+|----------|-------|
+| **Endpoint** | `/todos/{id}` |
+| **Method** | `PUT` |
+
+**Request Body:**
+```json
+{
+  "todo": "master Express.js"
+}
+```
+
+**Response:** The updated task object.
+
+---
+
+### 4. Mark Task as Completed
+
+| Property | Value |
+|----------|-------|
+| **Endpoint** | `/todos/{id}` |
+| **Method** | `PATCH` |
+
+**Response:** The task object with `"completed": true`.
+
+---
+
+### 5. Delete a Task
+
+| Property | Value |
+|----------|-------|
+| **Endpoint** | `/todos/{id}` |
+| **Method** | `DELETE` |
+
+**Response:**
+```json
+{
+  "message": "Task deleted successfully"
+}
+```
+
+---
+
+## How It Works
+
+| Action | Endpoint | Method | Description |
+|--------|----------|--------|-------------|
+| App loads | `/todos` | `GET` | Fetches all existing tasks |
+| Add task | `/todos` | `POST` | Creates a new task |
+| Edit task | `/todos/{id}` | `PUT` | Updates all fields of a task |
+| Mark complete | `/todos/{id}` | `PATCH` | Marks a specific task as completed |
+| Delete task | `/todos/{id}` | `DELETE` | Removes a specific task |
+
+---
+
+## Challenges Faced
+
+### 1. CORS Configuration
+Setting up CORS (Cross-Origin Resource Sharing) was a new concept that took about an hour to figure out. CORS is required to allow communication between the frontend and backend when they run on different origins. Learning what it does and how to install and configure it properly was an unexpected but valuable learning experience.
+
+### 2. Frontend API Integration
+The backend was completed relatively quickly, but the frontend took significantly more time — particularly the part where API calls are made using `fetch`. Getting the request/response handling right across all five operations required careful debugging and iteration.
