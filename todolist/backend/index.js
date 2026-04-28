@@ -5,8 +5,10 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "*",
-  origin: "https://friendly-mousse-c53720.netlify.app/",
+    origin: [
+    "http://localhost:5173",
+    "https://friendly-mousse-c53720.netlify.app"
+    ],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
 }));
 
