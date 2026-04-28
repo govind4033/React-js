@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const res = await fetch("http://localhost:7007/todos");
+      const res = await fetch("https://react-js-o9pt.onrender.com/todos");
       const data = await res.json();
       setTodos(data);
     };
@@ -19,7 +19,7 @@ function App() {
   }, []);
 
   const addTodo = async (todo) => {
-    const res = await fetch("http://localhost:7007/todos", {
+    const res = await fetch("https://react-js-o9pt.onrender.com/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(todo)
@@ -32,7 +32,7 @@ function App() {
   };
 
   const updateTodo = async (id, todo) => {
-    const res = await fetch(`http://localhost:7007/todos/${id}`, {
+    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ todo: todo.todo })
@@ -48,7 +48,7 @@ function App() {
   };
 
   const deleteTodo = async (id) => {
-    const res = await fetch(`http://localhost:7007/todos/${id}`, {
+    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
       method: "DELETE"
     });
 
@@ -58,7 +58,7 @@ function App() {
   };
 
   const toggleComplete = async (id) => {
-    const res = await fetch(`http://localhost:7007/todos/${id}`, {
+    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
       method: "PATCH"
     });
 

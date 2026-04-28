@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173"
+  origin: "*"
 }));
 
 let nums = [];
@@ -72,6 +72,8 @@ app.delete("/todos/:id", (req, res) => {
     res.status(200).json({ message: "Deleted" });
 });
 
-app.listen(7007, () => {
-    console.log("http://localhost:7007");
+const PORT = process.env.PORT || 7007;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
