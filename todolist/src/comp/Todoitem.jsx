@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { useTodo } from '../context'
 
 function Todoitem({ todo }) {
+  if (!todo) return null;
 
   const { updateTodo, deleteTodo, toggleComplete } = useTodo()
 
   const [isEditable, setisEditable] = useState(false)
-  const [todoMsg, setTodoMsg] = useState(todo.todo)
+  const [todoMsg, setTodoMsg] = useState(todo.title)
 
   const editTodo = () => {
-    updateTodo(todo.id, { ...todo, todo: todoMsg })
+    updateTodo(todo._id, todoMsg)
     setisEditable(false)
   }
 
@@ -19,11 +20,10 @@ function Todoitem({ todo }) {
       <input
         type="checkbox"
         checked={todo.completed}
-        onChange={() => toggleComplete(todo.id)}
+        onChange={() => toggleComplete(todo._id)}
       />
 
-      {
-        isEditable ? (
+      {isEditable ? (
           <input
             value={todoMsg}
             onChange={(e) => setTodoMsg(e.target.value)}
@@ -36,7 +36,7 @@ function Todoitem({ todo }) {
           />
         ) : (
           <span className={`mx-2 flex-1 ${todo.completed ? "line-through text-gray-400" : ""}`}>
-            {todo.todo}
+            {todo.title}
           </span>
         )
       }
@@ -49,7 +49,7 @@ function Todoitem({ todo }) {
       </button>
 
       <button
-        onClick={() => deleteTodo(todo.id)}
+        onClick={() => deleteTodo(todo._id)}
         className="text-red-500"
       >
         ❌

@@ -4,70 +4,78 @@ import { TodolistProvider } from './context'
 import TodoForm from './comp/Todoform'
 import Todoitem from './comp/Todoitem'
 
+// const BASE_URL = "https://react-js-o9pt.onrender.com";
+const BASE_URL = "http://localhost:7007";
+
 function App() {
 
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const res = await fetch("https://react-js-o9pt.onrender.com/todos");
-      const data = await res.json();
-      setTodos(data);
-    };
-
-    fetchTodos();
-  }, []);
-
-  const addTodo = async (todo) => {
-    const res = await fetch("https://react-js-o9pt.onrender.com/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(todo)
-    });
-
-    if (!res.ok) return;
-
+  const getTodos = async () => {
+    const res = await fetch(`${BASE_URL}/todos`);
     const data = await res.json();
-    setTodos(prev => [...prev, data]);
+    setTodos(data.data || []);
   };
 
-  const updateTodo = async (id, todo) => {
-    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
-      method: "PUT",
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  const addTodo = async (title) => {
+    const res = await fetch(`${BASE_URL}/todos`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ todo: todo.todo })
+      body: JSON.stringify({
+        title,
+        completed: false,
+      }),
     });
 
-    if (!res.ok) return;
+    const data = await res.json();
 
-    const updated = await res.json();
+    const newTodo = data.data || data.message;
 
-    setTodos(prev =>
-      prev.map(key => key.id === id ? updated : key)
+    setTodos([...todos, newTodo]);
+  };
+
+
+  const updateTodo = async (id, title) => {
+    const res = await fetch(`${BASE_URL}/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    });
+
+    const data = await res.json();
+    const updatedTodo = data.data || data;
+
+    setTodos(
+      todos.map((todo) =>
+        todo._id === id ? updatedTodo : todo
+      )
     );
   };
 
   const deleteTodo = async (id) => {
-    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
-      method: "DELETE"
+    await fetch(`${BASE_URL}/todos/${id}`, {
+      method: "DELETE",
     });
 
-    if (!res.ok) return;
-
-    setTodos(prev => prev.filter(key => key.id !== id));
+    setTodos(todos.filter((todo) => todo._id !== id));
   };
 
   const toggleComplete = async (id) => {
-    const res = await fetch(`https://react-js-o9pt.onrender.com/todos/${id}`, {
-      method: "PATCH"
+    const res = await fetch(`${BASE_URL}/todos/${id}`, {
+      method: "PATCH",
     });
 
-    if (!res.ok) return;
+    const data = await res.json();
+    const updatedTodo = data.data || data;
 
-    const updated = await res.json();
-
-    setTodos(prev =>
-      prev.map(key => key.id === id ? updated : key)
+    setTodos(
+      todos.map((todo) =>
+        todo._id === id ? updatedTodo : todo
+      )
     );
   };
 
@@ -78,13 +86,15 @@ function App() {
 
           <TodoForm />
 
-          {
-            todos.map((todo) => (
-              <div key={todo.id} className="w-full">
-                <Todoitem todo={todo} />
-              </div>
-            ))
-          }
+          {todos.map((todo) => (
+            <Todoitem
+              key={todo._id}
+              todo={todo}
+              updateTodo={updateTodo}
+              deleteTodo={deleteTodo}
+              toggleComplete={toggleComplete}
+            />
+          ))}
 
         </div>
       </div>
@@ -92,4 +102,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

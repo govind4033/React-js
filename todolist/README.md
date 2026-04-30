@@ -1,102 +1,129 @@
-# Todo REST API
+## To-Do List API (MERN Stack)
 
-## Introduction
+A full-stack To-Do List application built using the MERN stack.
+This project demonstrates CRUD operations, REST API design, and MongoDB integration with a React frontend.
 
-A REST API that supports full CRUD operations — creating, reading, updating, and deleting tasks.
 
----
+## Features
+	•	Create tasks
+	•	View all tasks
+	•	Update tasks
+	•	Mark tasks as completed
+	•	Delete tasks
+	•	Persistent storage using MongoDB
+	•	Real-time UI updates
+
+
+## Tech Stack
+
+Layer	Technology
+Frontend	React.js
+Backend	Node.js, Express.js
+Database	MongoDB (Mongoose)
+API	REST API
+Data	JSON
+
+
+
+## Database Model
+
+Each todo is stored in MongoDB as a document:
+
+{
+  "_id": "64f1a2b3c9d1e2f3a4b5c6d7",
+  "title": "Learn Express",
+  "completed": false,
+  "createdAt": "2026-04-30T10:00:00.000Z"
+}
+
+
 
 ## API Endpoints
 
-### 1. Get All Tasks
+Method	Endpoint	Description
+GET	/todos	Fetch all todos
+POST	/todos	Create a new todo
+PUT	/todos/:id	Update todo
+PATCH	/todos/:id	Toggle completion
+DELETE	/todos/:id	Delete todo
 
-| Property | Value |
-|----------|-------|
-| **Endpoint** | `/todos` |
-| **Method** | `GET` |
-| **Response** | Array of all task objects |
 
----
 
-### 2. Create a New Task
+## Example API Response
 
-| Property | Value |
-|----------|-------|
-| **Endpoint** | `/todos` |
-| **Method** | `POST` |
-
-**Request Body:**
-```json
 {
-  "todo": "learn Express.js"
+  "success": true,
+  "data": {
+    "_id": "64f1a2b3c9d1e2f3a4b5c6d7",
+    "title": "Learn Express",
+    "completed": false
+  }
 }
-```
 
-**Response:** The newly created task object.
+## Project Workflow
 
----
+User → React UI → API Request → Express Backend → MongoDB → Response → UI Update
 
-### 3. Update a Task
 
-| Property | Value |
-|----------|-------|
-| **Endpoint** | `/todos/{id}` |
-| **Method** | `PUT` |
 
-**Request Body:**
-```json
-{
-  "todo": "master Express.js"
-}
-```
+## Key Learnings
+	•	REST API design principles
+	•	MongoDB schema design using Mongoose
+	•	React state management with API integration
+	•	Handling asynchronous data flow
+	•	Debugging frontend-backend mismatches
 
-**Response:** The updated task object.
-
----
-
-### 4. Mark Task as Completed
-
-| Property | Value |
-|----------|-------|
-| **Endpoint** | `/todos/{id}` |
-| **Method** | `PATCH` |
-
-**Response:** The task object with `"completed": true`.
-
----
-
-### 5. Delete a Task
-
-| Property | Value |
-|----------|-------|
-| **Endpoint** | `/todos/{id}` |
-| **Method** | `DELETE` |
-
-**Response:**
-```json
-{
-  "message": "Task deleted successfully"
-}
-```
-
----
-
-## How It Works
-
-| Action | Endpoint | Method | Description |
-|--------|----------|--------|-------------|
-| App loads | `/todos` | `GET` | Fetches all existing tasks |
-| Add task | `/todos` | `POST` | Creates a new task |
-| Edit task | `/todos/{id}` | `PUT` | Updates all fields of a task |
-| Mark complete | `/todos/{id}` | `PATCH` | Marks a specific task as completed |
-| Delete task | `/todos/{id}` | `DELETE` | Removes a specific task |
-
----
 
 ## Challenges Faced
 
-### 1. CORS Configuration
-Setting up CORS (Cross-Origin Resource Sharing) was a new concept that took about an hour to figure out. CORS is required to allow communication between the frontend and backend when they run on different origins. Learning what it does and how to install and configure it properly was an unexpected but valuable learning experience.
+🔹 MongoDB Integration
 
-### 2. Frontend API Integration
-The backend was completed relatively quickly, but the frontend took significantly more time — particularly the part where API calls are made using `fetch`. Getting the request/response handling right across all five operations required careful debugging and iteration.
+Migrated from in-memory storage to MongoDB for persistence.
+
+🔹 _id Handling Issue
+
+Frontend initially failed due to inconsistent API response structure (data vs message).
+
+🔹 UI Sync Problem
+
+New todos were not rendering immediately — fixed by properly updating React state after API response.
+
+
+## Future Improvements
+	•	🔐 Authentication (JWT)
+	•	🔍 Search & filter todos
+	•	📊 Pagination
+	•	🎨 Better UI/UX
+	•	⚡ Optimistic UI updates
+
+
+## Installation
+
+# Clone repository
+git clone https://github.com/govind4033/React-js.git
+
+# Install backend dependencies
+cd backend
+npm install
+
+# Start backend
+npm run dev
+
+# Install frontend dependencies
+cd frontend
+npm install
+
+# Start frontend
+npm run dev
+
+
+
+## 👨‍💻 Author
+
+Govind lodhi
+MERN Stack Developer
+
+⸻
+⭐ If you like this project
+
+Give it a ⭐ on GitHub and feel free to fork it!

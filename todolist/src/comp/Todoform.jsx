@@ -11,7 +11,7 @@ function TodoForm() {
 
     if (!todo) return;
 
-    addTodo({ todo })
+    addTodo(todo)
     setTodo("")
   }
 
