@@ -10,6 +10,7 @@ function Todoitem({ todo }) {
   const [todoMsg, setTodoMsg] = useState(todo.title)
 
   const editTodo = () => {
+    if (!todoMsg.trim()) return;
     updateTodo(todo._id, todoMsg)
     setisEditable(false)
   }

@@ -3,96 +3,146 @@ import './App.css'
 import { TodolistProvider } from './context'
 import TodoForm from './comp/Todoform'
 import Todoitem from './comp/Todoitem'
+import axios from 'axios'
 
-// const BASE_URL = "https://react-js-o9pt.onrender.com";
-const BASE_URL = "http://localhost:7007";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 function App() {
 
   const [todos, setTodos] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const getTodos = async () => {
-    const res = await fetch(`${BASE_URL}/todos`);
-    const data = await res.json();
-    setTodos(data.data || []);
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.get(`${BASE_URL}/todos`);
+      setTodos(res.data.data);
+
+    } catch (err) {
+      setError("failed to fetch");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getTodos();
   }, []);
 
-  const addTodo = async (title) => {
-    const res = await fetch(`${BASE_URL}/todos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        completed: false,
-      }),
-    });
+  const searchTodos = async (title) => {
+    if (!title) {
+      clearSearch();
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.get(`${BASE_URL}/todos/search?title=${title}`);
 
-    const data = await res.json();
+      if (res.data.success) {
+        setSearchResults(res.data.data);
+      } else {
+        setSearchResults([]);
+      }
+      setIsSearching(true);
 
-    const newTodo = data.data || data.message;
-
-    setTodos([...todos, newTodo]);
+    } catch (err) {
+      setError("Search failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const clearSearch = () => {
+    setIsSearching(false);
+    setSearchResults([]);
+  };
+
+  const displayTodos = isSearching ? searchResults : todos;
+
+  const addTodo = async (title) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.post(`${BASE_URL}/todos`, {title});
+      setTodos([...todos, res.data.data]);
+
+    } catch (err) {
+      setError("Failed to add todo");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const updateTodo = async (id, title) => {
-    const res = await fetch(`${BASE_URL}/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title }),
-    });
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.put(`${BASE_URL}/todos/${id}`, { title });
+      setTodos(
+        todos.map((todo) =>
+          todo._id === id ? res.data.data : todo
+        )
+      );
 
-    const data = await res.json();
-    const updatedTodo = data.data || data;
-
-    setTodos(
-      todos.map((todo) =>
-        todo._id === id ? updatedTodo : todo
-      )
-    );
+    } catch (err) {
+      setError("Failed to update todo");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteTodo = async (id) => {
-    await fetch(`${BASE_URL}/todos/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      setLoading(true);
+      setError(null);
+      await axios.delete(`${BASE_URL}/todos/${id}`);
+      setTodos(todos.filter((todo) => todo._id !== id));
 
-    setTodos(todos.filter((todo) => todo._id !== id));
+    } catch (err) {
+      setError("Failed to delete todo");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleComplete = async (id) => {
-    const res = await fetch(`${BASE_URL}/todos/${id}`, {
-      method: "PATCH",
-    });
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.patch(`${BASE_URL}/todos/${id}`);
+      setTodos(
+        todos.map((todo) =>
+          todo._id === id ? res.data.data : todo
+        )
+      );
 
-    const data = await res.json();
-    const updatedTodo = data.data || data;
-
-    setTodos(
-      todos.map((todo) =>
-        todo._id === id ? updatedTodo : todo
-      )
-    );
+    } catch (err) {
+      setError("Failed to update status");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <TodolistProvider value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete }}>
+    <TodolistProvider value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete, searchTodos, clearSearch, isSearching }}>
       <div className="min-h-screen bg-gray-500 flex items-start justify-center px-4 py-10">
         <div className="bg-stone-300 rounded-2xl shadow-sm border border-stone-500 w-full max-w-200 p-8">
 
           <TodoForm />
 
-          {todos.map((todo) => (
+          {loading && <p className="text-blue-500">Loading...</p>}
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          {!loading && displayTodos.map((todo) => (
             <Todoitem
               key={todo._id}
               todo={todo}
-              updateTodo={updateTodo}
-              deleteTodo={deleteTodo}
-              toggleComplete={toggleComplete}
             />
           ))}
 

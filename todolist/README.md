@@ -1,129 +1,172 @@
-## To-Do List API (MERN Stack)
+# To-Do List App (MERN Stack)
 
-A full-stack To-Do List application built using the MERN stack.
-This project demonstrates CRUD operations, REST API design, and MongoDB integration with a React frontend.
+To-Do List application built using the MERN stack (MongoDB, Express, React, Node.js).
 
+---
 
 ## Features
-	•	Create tasks
-	•	View all tasks
-	•	Update tasks
-	•	Mark tasks as completed
-	•	Delete tasks
-	•	Persistent storage using MongoDB
-	•	Real-time UI updates
 
+- Create tasks
+- View all tasks
+- Update tasks
+- Mark tasks as completed
+- Delete tasks
+- Search tasks by title
+
+---
 
 ## Tech Stack
 
-Layer	Technology
-Frontend	React.js
-Backend	Node.js, Express.js
-Database	MongoDB (Mongoose)
-API	REST API
-Data	JSON
+Frontend: html, css, tailwind css,javascript, react.js
+Backend: node.js, express.js  
+Database: mongoDB 
+API: REST API using Axios
 
-
+---
 
 ## Database Model
 
-Each todo is stored in MongoDB as a document:
+task data format:
 
+```json
 {
   "_id": "64f1a2b3c9d1e2f3a4b5c6d7",
-  "title": "Learn Express",
+  "title": "wish commanded mere akka",
   "completed": false,
-  "createdAt": "2026-04-30T10:00:00.000Z"
 }
-
-
-
+```
+---
 ## API Endpoints
 
-Method	Endpoint	Description
-GET	/todos	Fetch all todos
-POST	/todos	Create a new todo
-PUT	/todos/:id	Update todo
-PATCH	/todos/:id	Toggle completion
-DELETE	/todos/:id	Delete todo
+1. GET	/todos	get all todos
+2. POST	/todos	add new task
+3. PUT	/todos/:id	update task
+4. PATCH	/todos/:id	mark unmark task
+5. DELETE	/todos/:id	delete task
+6. GET	/todos/search	search tasks by title
 
-
-
-## Example API Response
-
+## format of API response :-
+```json
 {
   "success": true,
   "data": {
     "_id": "64f1a2b3c9d1e2f3a4b5c6d7",
-    "title": "Learn Express",
+    "title": "task name",
     "completed": false
-  }
+  },
+  "message": "task completed"
 }
+```
+## Postman Testing
 
+testing of all api is done by postmen application
+
+1. Create Todo
+
+# Request
+Method: POST
+URL: /todos
+
+Body (JSON):
+```json
+{
+  "title": "Learn React"
+}
+```
+# Response
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "123",
+    "title": "Learn React",
+    "completed": false
+  },
+  "message": "anything"
+}
+```
+2. Get All Todos
+
+# Request
+Method: GET
+URL: /todos
+
+# Response
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "123",
+      "title": "Learn React",
+      "completed": false
+    },
+  ],
+  "message": "anything"
+}
+```
+3. Update Todo
+
+# Request
+Method: PUT
+URL: /todos/:id
+
+Body:
+```json
+{
+  "title": "Learn Node"
+}
+```
+4. Toggle Complete
+
+Request
+Method: PATCH
+URL: /todos/:id
+
+5. Delete Todo
+
+Request
+Method: DELETE
+URL: /todos/:id
+
+6. Search Todo
+
+# Request
+Method: GET
+URL:
+/todos/search?title=React
+
+## Response
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "123",
+      "title": "Learn React",
+      "completed": false
+    }
+  ],
+  "message": "anything"
+}
+```
 ## Project Workflow
 
-User → React UI → API Request → Express Backend → MongoDB → Response → UI Update
-
-
-
-## Key Learnings
-	•	REST API design principles
-	•	MongoDB schema design using Mongoose
-	•	React state management with API integration
-	•	Handling asynchronous data flow
-	•	Debugging frontend-backend mismatches
-
-
-## Challenges Faced
-
-🔹 MongoDB Integration
-
-Migrated from in-memory storage to MongoDB for persistence.
-
-🔹 _id Handling Issue
-
-Frontend initially failed due to inconsistent API response structure (data vs message).
-
-🔹 UI Sync Problem
-
-New todos were not rendering immediately — fixed by properly updating React state after API response.
-
+User → React → Axios api → Backend → MongoDB → Response → frontend
 
 ## Future Improvements
-	•	🔐 Authentication (JWT)
-	•	🔍 Search & filter todos
-	•	📊 Pagination
-	•	🎨 Better UI/UX
-	•	⚡ Optimistic UI updates
-
+Add authentication (JWT)
+Improve UI/UX
 
 ## Installation
 
-# Clone repository
-git clone https://github.com/govind4033/React-js.git
+git clone https: github.com/govind4033/React-js.git
 
-# Install backend dependencies
-cd backend
+Backend Setup
+// in backend folder
 npm install
-
-# Start backend
 npm run dev
 
-# Install frontend dependencies
-cd frontend
+Frontend Setup
 npm install
-
-# Start frontend
 npm run dev
-
-
-
-## 👨‍💻 Author
-
-Govind lodhi
-MERN Stack Developer
-
-⸻
-⭐ If you like this project
-
-Give it a ⭐ on GitHub and feel free to fork it!

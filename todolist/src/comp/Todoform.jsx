@@ -3,30 +3,53 @@ import { useTodo } from '../context'
 
 function TodoForm() {
 
-  const [todo, setTodo] = useState("")
-  const { addTodo } = useTodo()
+  const [value, setValue] = useState("")
 
-  const add = (e) => {
+  const { addTodo, searchTodos, clearSearch, isSearching } = useTodo()
+
+  const handleAdd = (e) => {
     e.preventDefault()
+    if (!value) return;
 
-    if (!todo) return;
-
-    addTodo(todo)
-    setTodo("")
+    addTodo(value)
+    setValue("")
   }
 
   return (
-    <form onSubmit={add} className="flex gap-2 mb-4">
+    <form onSubmit={handleAdd} className="flex gap-2 mb-4">
+
       <input
         type="text"
-        placeholder="Your wish is my command, my master 🧞‍♂️"
-        className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-gray-400 focus:bg-white transition"
-        value={todo}
-        onChange={(e) => setTodo(e.target.value)}
+        placeholder="Add or search todo..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="flex-1 px-4 py-3 rounded-xl border"
       />
-      <button className="w-11 h-11 rounded-xl bg-gray-900 text-white text-xl flex items-center justify-center hover:bg-gray-700 transition">
-        +
+
+      <button className="bg-gray-900 text-white px-3 py-2 rounded w-20">
+        Add
       </button>
+
+      <button
+        type="button"
+        onClick={() => searchTodos(value)}
+        className="bg-blue-500 text-white px-3 py-2 rounded w-20"
+      >
+        Search
+      </button>
+
+      {isSearching && (
+        <button
+          type="button"
+          onClick={() => {
+            clearSearch(),
+            setValue("")
+          }}
+          className="bg-red-500 text-white px-3 py-2 rounded w-20"
+        >
+          Clear
+        </button>
+      )}
     </form>
   )
 }
