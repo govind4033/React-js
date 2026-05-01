@@ -69,10 +69,10 @@ function App() {
   const displayTodos = isSearching ? searchResults : todos;
 
   const addTodo = async (title) => {
+    setLoading(true);
     setError(null);
 
     try {
-      setLoading(true);
       const res = await axios.post(`${BASE_URL}/todos`, { title });
 
       // add new one to prev array or list
@@ -88,32 +88,39 @@ function App() {
 
   const updateTodo = async (id, title) => {
     setError(null);
+    setLoading(true);
 
     try {
-      setLoading(true);
       const res = await axios.put(`${BASE_URL}/todos/${id}`, { title });
 
       setTodos(todos.map((todo) => todo._id === id ? res.data.data : todo));
 
     } catch (err) {
       setError("update failed");
+    }  finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const deleteTodo = async (id) => {
-    // i don't think delete need loading function because it's fast
+    setError(null);
+    setLoading(true);
+
     try {
       await axios.delete(`${BASE_URL}/todos/${id}`);
       setTodos(todos.filter((todo) => todo._id !== id));
 
     } catch (err) {
       setError("delete failed");
+    } finally{
+      setLoading(false);
     }
   };
 
   const toggleComplete = async (id) => {
+    setError(null);
+    setLoading(true);
+
     try {
       const res = await axios.patch(`${BASE_URL}/todos/${id}`);
 
@@ -121,6 +128,8 @@ function App() {
 
     } catch (err) {
       setError("status update failed");
+    } finally {
+      setLoading(false);
     }
   };
 
