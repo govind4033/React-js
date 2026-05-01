@@ -8,7 +8,19 @@ function Todoitem({ todo }) {
 
   const [isEditable, setisEditable] = useState(false)
   const [todoMsg, setTodoMsg] = useState(todo.title)
+  /*
+    1 click edit button check isEditable = true
+    2 then input field with prev data
+    3 modify data and store in todoMsg
+    4 when we press enter or save btn
+    5 updateTodo api call
+    6 we exit with esEditable = false
+  */
 
+    /* WHY i choose this
+    ui-specific state isEditable only effect todoitem and todoMsg uses temporary input
+    isEditable help managing two UI view modde and edit mode
+    */
   const editTodo = () => {
     if (!todoMsg.trim()) return;
     updateTodo(todo._id, todoMsg)
@@ -24,6 +36,8 @@ function Todoitem({ todo }) {
         onChange={() => toggleComplete(todo._id)}
       />
 
+      {/* if editing: show input
+          else: show normal text */}
       {isEditable ? (
           <input
             value={todoMsg}
@@ -42,6 +56,7 @@ function Todoitem({ todo }) {
         )
       }
 
+      {/* save and edit button */}
       <button
         onClick={() => isEditable ? editTodo() : setisEditable(true)}
         className="text-blue-500 mx-1 p-3"
@@ -49,6 +64,7 @@ function Todoitem({ todo }) {
         {isEditable ? "💾" : "✏️"}
       </button>
 
+      {/* delete button */}
       <button
         onClick={() => deleteTodo(todo._id)}
         className="text-red-500"

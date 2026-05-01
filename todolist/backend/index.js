@@ -1,13 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const DBconection = require("./database-connection")
-require("dotenv").config();
+const dotenv = require("dotenv")
+const todoRoutes = require("./routes/todos")
+const app = express();
 
+//dotenv for accessing mongo url and port no
+dotenv.config();
+
+//db connection method which is imported from database-connection folder where connection in establish
 DBconection()
 
-const todoRoutes = require("./routes/todos")
-
-const app = express();
 app.use(express.json());
 
 app.use(cors({
@@ -18,10 +21,12 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
 }));
 
+// to load routes
 app.use("/todos", todoRoutes);
 
-const PORT = process.env.PORT || 7007;
+//port used from .env file
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Server running on port no: " + PORT);
 });

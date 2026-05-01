@@ -57,6 +57,36 @@ task data format:
   "message": "task completed"
 }
 ```
+## Installation
+
+# Backend
+folder: /todolist/backend
+npm install
+npm init -y
+npm i express
+npm i -g nodemon (globally)
+npm i nodemon (for specific folder)
+npm i dotenv
+
+RUN: npm run dev
+
+# Frontend
+folder: /todolist
+npm install
+npm install axios
+npm install react-router-dom
+npm install tailwindcss @tailwindcss/vite
+
+RUN: npm run dev
+
+## Project Workflow
+
+User → React → Axios api → Backend → MongoDB → Response → frontend
+
+## Future Improvements
+Add authentication (JWT)
+Improve UI/UX
+
 ## Postman Testing
 
 testing of all api is done by postmen application
@@ -127,14 +157,17 @@ URL: /todos/:id
 
 Request
 Method: DELETE
+
 URL: /todos/:id
 
 6. Search Todo
 
+Limitations: Search uses simple regex
+
 # Request
 Method: GET
-URL:
-/todos/search?title=React
+
+URL: /todos/search?title=React
 
 ## Response
 ```json
@@ -150,23 +183,30 @@ URL:
   "message": "anything"
 }
 ```
-## Project Workflow
+# API Testing (Postman)
 
-User → React → Axios api → Backend → MongoDB → Response → frontend
+## Add Task
+**Success (201):**  
+![Create Task OK](screenshots/postmen-testing/create_task_ok.png)
 
-## Future Improvements
-Add authentication (JWT)
-Improve UI/UX
+## Delete Task
+**Success (200 OK):**  
+![Delete OK](screenshots/postmen-testing/delete_ok.png)
 
-## Installation
+## Get All Tasks
+**Success (200 OK):**  
+![Get All OK](screenshots/postmen-testing/get_all_ok.png)
 
-git clone https: github.com/govind4033/React-js.git
+## Get Task by ID
+**Success (200 OK):**  
+![Get By ID OK](screenshots/postmen-testing/get_by_id_ok.png)
 
-Backend Setup
-// in backend folder
-npm install
-npm run dev
+**Failed (404):**  
+![Get By ID Error](screenshots/postmen-testing/get_by_id_error.png)
 
-Frontend Setup
-npm install
-npm run dev
+## Mark Task by ID
+**Success (200 OK):**  
+![Mark By ID OK](screenshots/postmen-testing/mark_by_id_ok.png)
+
+**Failed (404):**  
+![Mark By ID Error](screenshots/postmen-testing/mark_by_id_error.png)
